@@ -1,24 +1,25 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard</title>
+    <title>Dashboard Pembeli</title>
 </head>
 <body>
 
-    <h1>Selamat Datang!</h1>
+    <h1>Dashboard Pembeli</h1>
 
     <p>
-        Halo, {{ Auth::user()->name }}
+        Selamat datang,
+        {{ Auth::user()->name }}
     </p>
 
     <p>
-        Email: {{ Auth::user()->email }}
+        Role: {{ Auth::user()->role->name }}
     </p>
 
     <form action="{{ route('logout') }}" method="POST">
         @csrf
-
         <button type="submit">Logout</button>
     </form>
 

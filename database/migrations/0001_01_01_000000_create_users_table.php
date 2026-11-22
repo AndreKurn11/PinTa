@@ -6,18 +6,26 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
+            // Primary key
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
+            
+            // Foreign key ke tabel roles
+            $table->foreignId('role_id')->constrained('roles')->restrictOnDelete();
+
+            // Informasi user
+            $table->string('name', 100);
+            $table->string('email', 150)->unique();
+            $table->string('password', 50);
+            $table->string('phone', 20)->nullable();
+            $table->string('identity_number', 20)->nullable();
+            $table->text('address')->nullable();
+            $table->string('avatar_path', 255)->nullable();
+            $table->enum('status', ['active', 'suspended'])->default('active');
+
+            // Timestamps
             $table->timestamps();
         });
 
@@ -37,9 +45,6 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('users');

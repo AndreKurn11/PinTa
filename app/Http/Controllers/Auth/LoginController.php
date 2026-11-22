@@ -25,10 +25,39 @@ class LoginController extends Controller
 
         // Memeriksa email dan password
         if (Auth::attempt($credentials)) {
-            // Regenerasi session untuk keamanan
+            // Regenerasi session
             $request->session()->regenerate();
-            // Redirect setelah login
-            return redirect()->intended('/dashboard');
+
+            // Mengambil role user
+            $role = Auth::user()->role->name ?? null;
+
+            // Redirect berdasarkan role
+            if ($role === 'admin') {
+                return redirect()->route('admin.dashboard');
+            }
+
+            if ($role === 'pengunjung') {
+                return redirect()->route('pengunjung.dashboard');
+            }
+
+            if ($role === 'pembeli') {
+                return redirect()->route('pembeli.dashboard');
+            }
+
+            if ($role === 'penjual') {
+                return redirect()->route('penjual.dashboard');
+            }
+
+            // Jika role tidak dikenali
+            Auth::logout();
+
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return redirect()->route('login')
+                ->withErrors([
+                    'email' => 'Role akun tidak valid.',
+                ]);
         }
 
         // Jika login gagal

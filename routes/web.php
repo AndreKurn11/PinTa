@@ -1,66 +1,90 @@
 <?php
 
-use App\Http\Controllers\Auth\LoginController;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-// REDIRECT HALAMAN UTAMA
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\LoginController;
+
+
+// ==========================================
+// PUBLIC ROUTES
+// ==========================================
+
 Route::get('/', function () {
-    // Jika belum login, arahkan ke halaman login
-    if (!Auth::check()) {
-        return redirect()->route('login');
-    }
-    // Ambil role user yang sedang login
-    $role = Auth::user()->role?->name;
-    // Mapping role ke route dashboard
-    $dashboards = [
-        'admin'      => 'admin.dashboard',
-        'pengunjung' => 'pengunjung.dashboard',
-        'pembeli'    => 'pembeli.dashboard',
-        'penjual'    => 'penjual.dashboard',
-    ];
-    // Validasi role
-    if (!isset($dashboards[$role])) {
-        abort(403, 'Role akun tidak valid.');
-    }
-    // Redirect ke dashboard sesuai role
-    return redirect()->route($dashboards[$role]);
-});
+    return view('dashboard.index');
+})->name('dashboard');
 
 
-// ROUTE UNTUK PENGGUNA BELUM LOGIN
+// ==========================================
+// GUEST ROUTES
+// ==========================================
+
 Route::middleware('guest')->group(function () {
-    Route::controller(LoginController::class)->group(function () {
-        // Menampilkan halaman login
-        Route::get('/login', 'showLoginForm')
-            ->name('login');
-        // Memproses login
-        Route::post('/login', 'login')
-            ->name('login.process');
-    });
+
+    // REGISTER
+    Route::get('/register', [RegisterController::class, 'create'])
+        ->name('register');
+
+    Route::post('/register', [RegisterController::class, 'store'])
+        ->name('register.store');
+
+    // LOGIN
+    Route::get('/login', [LoginController::class, 'create'])
+        ->name('login');
+
+    Route::post('/login', [LoginController::class, 'store'])
+        ->name('login.store');
 });
 
 
-// ROUTE UNTUK PENGGUNA SUDAH LOGIN
+// ==========================================
+// BUYER ROUTES
+// ==========================================
+
+Route::middleware(['auth', 'role:pembeli'])->group(function () {
+
+    Route::get('/checkout', function () {
+        return 'Halaman Checkout Pembeli';
+    })->name('checkout');
+});
+
+
+// ==========================================
+// ADMIN ROUTES
+// ==========================================
+
+Route::middleware(['auth', 'role:admin'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+
+        Route::get('/dashboard', function () {
+            return view('admin.dashboard');
+        })->name('dashboard');
+    });
+
+
+// ==========================================
+// SELLER ROUTES
+// ==========================================
+
+Route::middleware(['auth', 'role:penjual'])
+    ->prefix('seller')
+    ->name('seller.')
+    ->group(function () {
+
+        Route::get('/dashboard', function () {
+            return 'Dashboard Penjual';
+        })->name('dashboard');
+    });
+
+
+// ==========================================
+// AUTHENTICATED ROUTES
+// ==========================================
+
 Route::middleware('auth')->group(function () {
-    // Logout
-    Route::post('/logout', [LoginController::class, 'logout'])
+
+    Route::post('/logout', [LoginController::class, 'destroy'])
         ->name('logout');
-    // Daftar role pengguna
-    $roles = [
-        'admin',
-        'pengunjung',
-        'pembeli',
-        'penjual',
-    ];
-    // Generate route dashboard berdasarkan role
-    foreach ($roles as $role) {
-        Route::middleware("role:{$role}")
-            ->prefix($role)
-            ->name("{$role}.")
-            ->group(function () use ($role) {
-                Route::view('/dashboard', "{$role}.dashboard")
-                    ->name('dashboard');
-            });
-    }
 });

@@ -5,73 +5,78 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
-    // Menampilkan halaman login
-    public function showLoginForm()
+    /**
+     * Menampilkan halaman login.
+     */
+    public function create()
     {
         return view('auth.login');
     }
 
-    // Memproses login
-    public function login(Request $request)
+    /**
+     * Memproses login user.
+     */
+    public function store(Request $request)
     {
-        // Validasi input
+        // 1. Validasi input
         $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
+            'email' => [
+                'required',
+                'email',
+            ],
+
+            'password' => [
+                'required',
+                'string',
+            ],
+        ], [
+            'email.required' => 'Email wajib diisi.',
+            'email.email' => 'Format email tidak valid.',
+            'password.required' => 'Password wajib diisi.',
         ]);
 
-        // Memeriksa email dan password
-        if (Auth::attempt($credentials)) {
-            // Regenerasi session
-            $request->session()->regenerate();
+        // 2. Memeriksa email, password, dan status akun
+        $authenticated = Auth::attempt([
+            'email' => $credentials['email'],
+            'password' => $credentials['password'],
+            'status' => 'active',
+        ]);
 
-            // Mengambil role user
-            $role = Auth::user()->role->name ?? null;
-
-            // Redirect berdasarkan role
-            if ($role === 'admin') {
-                return redirect()->route('admin.dashboard');
-            }
-
-            if ($role === 'pengunjung') {
-                return redirect()->route('pengunjung.dashboard');
-            }
-
-            if ($role === 'pembeli') {
-                return redirect()->route('pembeli.dashboard');
-            }
-
-            if ($role === 'penjual') {
-                return redirect()->route('penjual.dashboard');
-            }
-
-            // Jika role tidak dikenali
-            Auth::logout();
-
-            $request->session()->invalidate();
-            $request->session()->regenerateToken();
-
-            return redirect()->route('login')
-                ->withErrors([
-                    'email' => 'Role akun tidak valid.',
-                ]);
+        // 3. Jika autentikasi gagal
+        if (!$authenticated) {
+            throw ValidationException::withMessages([
+                'email' => 'Email atau password salah, atau akun tidak aktif.',
+            ]);
         }
 
-        // Jika login gagal
-        return back()->withErrors([
-            'email' => 'Email atau password salah.',
-        ])->onlyInput('email');
+        // 4. Regenerasi session untuk keamanan
+        $request->session()->regenerate();
+
+        // 5. Redirect ke halaman sebelumnya atau dashboard
+        return redirect()->intended('/')
+            ->with('success', 'Login berhasil! Selamat datang kembali.');
     }
 
-    // Logout
-    public function logout(Request $request)
+    /**
+     * Memproses logout user.
+     */
+    public function destroy(Request $request)
     {
+        // 1. Mengakhiri autentikasi user
         Auth::logout();
+
+        // 2. Menghapus seluruh data session
         $request->session()->invalidate();
+
+        // 3. Membuat token CSRF baru
         $request->session()->regenerateToken();
-        return redirect('/login');
+
+        // 4. Kembali ke dashboard publik
+        return redirect('/')
+            ->with('success', 'Kamu berhasil logout.');
     }
 }

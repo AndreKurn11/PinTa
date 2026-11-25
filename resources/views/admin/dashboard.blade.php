@@ -1,166 +1,45 @@
 @extends('layouts.admin')
 
 @section('title', 'Dashboard Admin')
-
 @section('page-heading', 'Dashboard Administrator')
 
 @section('content')
+<div class="page-title">
+    <h1>Selamat datang, {{ auth()->user()->name }} 👋</h1>
+    <p>Ringkasan pengelolaan marketplace PinTa hari ini.</p>
+</div>
 
-    <div class="page-title">
+<section class="stat-grid" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;margin-bottom:18px">
+    <article class="panel" style="display:flex;align-items:center;gap:15px">
+        <span style="width:48px;height:48px;flex:0 0 48px;border-radius:15px;background:#f7eee8;color:#89563f;display:grid;place-items:center"><span class="material-symbols-outlined">group</span></span>
+        <div><p class="subtext" style="font-size:11px;font-weight:700">Total Pengguna</p><h2 style="font-size:25px;letter-spacing:-1px">—</h2><p class="subtext">Belum terhubung ke database</p></div>
+    </article>
+    <article class="panel" style="display:flex;align-items:center;gap:15px">
+        <span style="width:48px;height:48px;flex:0 0 48px;border-radius:15px;background:#e9f5ed;color:#247a50;display:grid;place-items:center"><span class="material-symbols-outlined">inventory_2</span></span>
+        <div><p class="subtext" style="font-size:11px;font-weight:700">Total Produk</p><h2 style="font-size:25px;letter-spacing:-1px">—</h2><p class="subtext">Belum terhubung ke database</p></div>
+    </article>
+    <article class="panel" style="display:flex;align-items:center;gap:15px">
+        <span style="width:48px;height:48px;flex:0 0 48px;border-radius:15px;background:#fff4df;color:#9a6418;display:grid;place-items:center"><span class="material-symbols-outlined">receipt_long</span></span>
+        <div><p class="subtext" style="font-size:11px;font-weight:700">Total Pesanan</p><h2 style="font-size:25px;letter-spacing:-1px">—</h2><p class="subtext">Belum terhubung ke database</p></div>
+    </article>
+    <article class="panel" style="display:flex;align-items:center;gap:15px">
+        <span style="width:48px;height:48px;flex:0 0 48px;border-radius:15px;background:#f1ecf8;color:#76549a;display:grid;place-items:center"><span class="material-symbols-outlined">storefront</span></span>
+        <div><p class="subtext" style="font-size:11px;font-weight:700">Pendaftaran Penjual</p><h2 style="font-size:25px;letter-spacing:-1px">—</h2><p class="subtext">Belum terhubung ke database</p></div>
+    </article>
+</section>
 
-        <h1>Selamat Datang, {{ auth()->user()->name }}!</h1>
-
-        <p>
-            Berikut adalah halaman pengelolaan marketplace PinTa.
-        </p>
+<section class="panel">
+    <div class="panel-heading">
+        <div><h2>Panel Administrator PinTa</h2><p>Kelola aktivitas dan pengajuan penjual melalui satu tempat.</p></div>
+        <span class="status status-approved">Panel aktif</span>
     </div>
-
-
-    {{-- STATISTIK --}}
-    <div class="stat-grid">
-
-        <div class="stat-card">
-            <div class="stat-icon blue">👥</div>
-            <div>
-                <p>Total Pengguna</p>
-                <h2>—</h2>
-                <small>Belum terhubung ke database</small>
-            </div>
-        </div>
-
-        <div class="stat-card">
-            <div class="stat-icon green">🛍️</div>
-            <div>
-                <p>Total Produk</p>
-                <h2>—</h2>
-                <small>Belum terhubung ke database</small>
-            </div>
-        </div>
-
-        <div class="stat-card">
-            <div class="stat-icon orange">📦</div>
-            <div>
-                <p>Total Pesanan</p>
-                <h2>—</h2>
-                <small>Belum terhubung ke database</small>
-            </div>
-        </div>
-
-        <div class="stat-card">
-            <div class="stat-icon purple">🏪</div>
-            <div>
-                <p>Pendaftaran Penjual</p>
-                <h2>—</h2>
-                <small>Belum terhubung ke database</small>
-            </div>
-        </div>
-
+    <p style="font-size:13px;color:#817a74;line-height:1.8">Melalui halaman ini, administrator dapat memantau pengguna, produk, pesanan, dan pendaftaran penjual. Saat ini, fitur yang sudah tersedia adalah pemeriksaan pengajuan pendaftaran penjual.</p>
+    <div style="margin-top:18px">
+        <a class="btn" href="{{ route('admin.seller-registrations.index') }}"><span class="material-symbols-outlined" style="font-size:17px">how_to_reg</span>Lihat Pengajuan Penjual</a>
     </div>
+</section>
 
-
-    {{-- INFORMASI --}}
-    <div class="welcome-card">
-
-        <h2>Panel Administrator PinTa</h2>
-
-        <p>
-            Melalui halaman ini, administrator dapat mengelola
-            pengguna, produk, pesanan, dan pendaftaran penjual.
-        </p>
-
-        <p>
-            Fitur pengelolaan akan dikembangkan pada tahap berikutnya.
-        </p>
-
-    </div>
-
-
-    <style>
-        .stat-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 23px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            gap: 18px;
-            box-shadow: 0 2px 8px rgba(0,0,0,.04);
-        }
-
-        .stat-icon {
-            width: 55px;
-            height: 55px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 25px;
-            flex-shrink: 0;
-        }
-
-        .blue {
-            background: #dbeafe;
-        }
-
-        .green {
-            background: #dcfce7;
-        }
-
-        .orange {
-            background: #ffedd5;
-        }
-
-        .purple {
-            background: #f3e8ff;
-        }
-
-        .stat-card p {
-            color: #64748b;
-            font-size: 13px;
-            margin-bottom: 7px;
-        }
-
-        .stat-card h2 {
-            font-size: 26px;
-            color: #1e293b;
-            margin-bottom: 5px;
-        }
-
-        .stat-card small {
-            color: #94a3b8;
-            font-size: 11px;
-        }
-
-        .welcome-card {
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,.04);
-        }
-
-        .welcome-card h2 {
-            color: #1e293b;
-            margin-bottom: 12px;
-        }
-
-        .welcome-card p {
-            color: #64748b;
-            font-size: 14px;
-            line-height: 1.7;
-            margin-bottom: 8px;
-        }
-
-        @media(max-width: 700px) {
-            .stat-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
-
+<style>
+@media(max-width:680px){.stat-grid{grid-template-columns:1fr!important}}
+</style>
 @endsection

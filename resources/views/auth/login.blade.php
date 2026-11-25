@@ -1,301 +1,150 @@
-
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Login - PinTa Marketplace</title>
-
+    <title>Masuk ke PINTA — PinTa</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, Helvetica, sans-serif;
-        }
-
-        body {
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: #f1f5f9;
-            padding: 20px;
-        }
-
-        /* LOGIN CONTAINER */
-        .login-container {
-            width: 100%;
-            max-width: 420px;
-            background: #ffffff;
-            padding: 40px 35px;
-            border-radius: 14px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
-        }
-
-        /* HEADER */
-        .login-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .logo {
-            font-size: 32px;
-            font-weight: bold;
-            color: #2563eb;
-            margin-bottom: 10px;
-        }
-
-        .login-header h1 {
-            font-size: 24px;
-            color: #1e293b;
-            margin-bottom: 8px;
-        }
-
-        .login-header p {
-            font-size: 14px;
-            color: #64748b;
-        }
-
-        /* ALERT */
-        .alert-success {
-            background: #dcfce7;
-            color: #166534;
-            padding: 12px;
-            border-radius: 7px;
-            font-size: 13px;
-            margin-bottom: 20px;
-        }
-
-        .alert-error {
-            background: #fee2e2;
-            color: #991b1b;
-            padding: 12px 15px;
-            border-radius: 7px;
-            font-size: 13px;
-            margin-bottom: 20px;
-        }
-
-        .alert-error ul {
-            padding-left: 18px;
-        }
-
-        /* FORM */
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 14px;
-            font-weight: 600;
-            color: #334155;
-            margin-bottom: 8px;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 13px 14px;
-            border: 1px solid #cbd5e1;
-            border-radius: 7px;
-            font-size: 14px;
-            outline: none;
-            transition: 0.2s;
-        }
-
-        .form-group input:focus {
-            border-color: #2563eb;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
-        }
-
-        .form-group input::placeholder {
-            color: #94a3b8;
-        }
-
-        /* BUTTON */
-        .btn-login {
-            width: 100%;
-            padding: 13px;
-            border: none;
-            border-radius: 7px;
-            background: #2563eb;
-            color: white;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .btn-login:hover {
-            background: #1d4ed8;
-        }
-
-        /* REGISTER LINK */
-        .register-link {
-            text-align: center;
-            margin-top: 25px;
-            font-size: 14px;
-            color: #64748b;
-        }
-
-        .register-link a {
-            color: #2563eb;
-            font-weight: 600;
-            text-decoration: none;
-        }
-
-        .register-link a:hover {
-            text-decoration: underline;
-        }
-
-        /* BACK TO HOME */
-        .back-home {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .back-home a {
-            color: #64748b;
-            text-decoration: none;
-            font-size: 13px;
-        }
-
-        .back-home a:hover {
-            color: #2563eb;
-        }
-
-        /* RESPONSIVE */
-        @media (max-width: 480px) {
-            .login-container {
-                padding: 30px 22px;
-            }
-
-            .login-header h1 {
-                font-size: 21px;
-            }
-        }
-    </style>
-
+    :root{--primary:#8f563b;--primary-dark:#74432f;--primary-soft:#f3e6de;--surface:#fff;--page:#f5f4f2;--text:#292521;--muted:#817971;--line:#e9e4df;--danger:#a12622;--success:#216b43}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{min-height:100vh;background:var(--page);color:var(--text);font-family:Inter,Arial,sans-serif}
+    a{color:inherit;text-decoration:none}
+    button,input{font:inherit}
+    .topbar{height:70px;padding:0 5.5%;display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.82);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
+    .back-link{display:inline-flex;align-items:center;gap:9px;padding:9px 14px;border:1px solid var(--line);border-radius:30px;background:#fff;font-size:12px;font-weight:600;color:#514a44}
+    .portal-tag{display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border-radius:30px;background:var(--primary-soft);color:var(--primary);font-size:10px;font-weight:700}
+    .online{display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--line);border-radius:30px;background:#fff;color:#6b655f;font-size:11px}
+    .online i{width:7px;height:7px;border-radius:50%;background:#319568;display:inline-block;box-shadow:0 0 0 4px #31956820}
+    .auth-shell{max-width:1360px;margin:0 auto;padding:26px 28px;min-height:calc(100vh - 132px);display:grid;grid-template-columns:minmax(330px,.88fr) minmax(430px,1.12fr);gap:24px;align-items:stretch}
+    .showcase{position:relative;overflow:hidden;border-radius:22px;background:linear-gradient(145deg,#75432f,#965b40 62%,#b47b5d);color:#fff;padding:38px;display:flex;flex-direction:column;justify-content:space-between;min-height:690px;box-shadow:0 8px 28px #5c38251a}
+    .showcase:before,.showcase:after{content:"";position:absolute;border:1px solid #ffffff22;border-radius:50%;pointer-events:none}
+    .showcase:before{width:430px;height:430px;right:-210px;top:80px;box-shadow:0 0 0 34px #ffffff09,0 0 0 75px #ffffff07}
+    .showcase:after{width:260px;height:260px;left:-160px;bottom:100px}
+    .brand{position:relative;z-index:1;display:flex;align-items:center;gap:12px}
+    .brand-mark{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;background:#00000026;border:1px solid #ffffff3d;font-size:24px;font-weight:800}
+    .brand-name{font-size:21px;font-weight:800;letter-spacing:1px}
+    .brand-sub{margin-top:3px;color:#f3dfd3;font-size:11px}
+    .showcase-copy{position:relative;z-index:1;margin:38px 0}
+    .eyebrow{display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border:1px solid #ffffff35;border-radius:30px;background:#00000020;font-size:10px;font-weight:700}
+    .showcase h1{max-width:520px;margin:18px 0 13px;font-size:clamp(30px,3.2vw,43px);line-height:1.14;letter-spacing:-1.4px}
+    .showcase-copy p{max-width:500px;color:#fff0e8;font-size:13px;line-height:1.8}
+    .visual{position:relative;z-index:1;min-height:190px;border:1px solid #ffffff30;border-radius:17px;background:linear-gradient(135deg,#ffffff1c,#00000016);display:flex;align-items:center;justify-content:center;overflow:hidden}
+    .visual-art{display:flex;align-items:center;gap:18px;color:#fff}
+    .visual-art .book{width:100px;height:125px;border-radius:8px 13px 13px 8px;background:linear-gradient(135deg,#f8eee6,#d8bda9);box-shadow:12px 12px 25px #30180f40;transform:rotate(-8deg);display:grid;place-items:center;color:#8c553c;font-size:40px}
+    .visual-art .tablet{width:125px;height:95px;border:7px solid #342d2a;border-radius:12px;background:#e9d9ca;display:grid;place-items:center;color:#8c553c;font-size:32px;transform:rotate(7deg)}
+    .showcase-foot{position:relative;z-index:1;padding-top:17px;border-top:1px solid #ffffff35;display:flex;justify-content:space-between;gap:12px;color:#fff4ed;font-size:10px}
+    .auth-side{display:flex;align-items:center;justify-content:center;padding:10px}
+    .auth-card{width:100%;max-width:570px;padding:32px;background:var(--surface);border:1px solid var(--line);border-radius:20px;box-shadow:0 8px 30px #38271b0b}
+    .auth-card h2{font-size:24px;letter-spacing:-.7px;margin-bottom:7px}
+    .intro{font-size:12px;line-height:1.6;color:var(--muted);margin-bottom:24px}
+    .alert{padding:12px 14px;border-radius:11px;margin-bottom:17px;font-size:12px;line-height:1.6}
+    .alert-success{background:#edf8f0;border:1px solid #c7e6d0;color:var(--success)}
+    .alert-error{background:#fff0ef;border:1px solid #f1cfcc;color:var(--danger)}
+    .alert ul{padding-left:18px}
+    .field{margin-bottom:17px}
+    .field label{display:block;margin-bottom:7px;color:#6f6861;font-size:10px;font-weight:800;letter-spacing:.75px;text-transform:uppercase}
+    .input-wrap{position:relative}
+    .field input{width:100%;height:46px;padding:0 14px;border:1px solid transparent;border-radius:10px;background:#f4f2f0;color:var(--text);font-size:13px;outline:none;transition:.2s}
+    .field input:focus{background:#fff;border-color:#c69b83;box-shadow:0 0 0 4px #8f563b12}
+    .field input::placeholder{color:#aaa19a}
+    .input-wrap.has-toggle input{padding-right:48px}
+    .toggle-password{position:absolute;right:12px;top:50%;transform:translateY(-50%);border:0;background:none;color:#827970;cursor:pointer;font-size:11px}
+    .submit{width:100%;height:48px;margin-top:5px;border:0;border-radius:30px;background:var(--primary);color:white;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 5px 13px #8f563b25;transition:.2s}
+    .submit:hover{background:var(--primary-dark);transform:translateY(-1px)}
+    .auth-switch{margin-top:22px;padding-top:18px;border-top:1px solid var(--line);text-align:center;color:var(--muted);font-size:12px}
+    .auth-switch a{color:var(--primary);font-weight:800;margin-left:4px}
+    .auth-switch a:hover{text-decoration:underline}
+    .bottom{min-height:62px;padding:15px 5.5%;display:flex;align-items:center;justify-content:space-between;gap:15px;background:#ffffffa8;border-top:1px solid var(--line);color:#827a73;font-size:10px}
+    .bottom strong{color:#4e4842}
+    @media(max-width:900px){.auth-shell{grid-template-columns:1fr;max-width:680px;min-height:auto;padding:20px 18px}.showcase{min-height:auto;padding:25px;border-radius:18px}.showcase-copy{margin:25px 0 18px}.showcase h1{font-size:30px}.visual{display:none}.showcase-foot{margin-top:5px}.auth-side{padding:0}.auth-card{max-width:none}.topbar{padding:0 18px}.portal-tag{display:none}.bottom{padding:14px 18px;flex-wrap:wrap}}
+    @media(max-width:520px){.topbar{height:60px}.online{font-size:0;padding:9px}.online i{margin:0}.auth-shell{padding:14px 12px 24px;gap:14px}.showcase{padding:21px}.showcase h1{font-size:26px}.showcase-copy p{font-size:12px}.showcase-foot{font-size:9px}.auth-card{padding:23px 18px;border-radius:17px}.auth-card h2{font-size:21px}.bottom{justify-content:center;text-align:center}}
+</style>
 </head>
-
 <body>
+    <header class="topbar">
+        <a href="{{ route('dashboard') }}" class="back-link"><span>←</span> Kembali ke Pasar PINTA</a>
+        <span class="portal-tag">✦ &nbsp; Portal Autentikasi Mahasiswa Jambi</span>
+        <span class="online"><i></i> Portal aktif</span>
+    </header>
 
-    <div class="login-container">
+    <main class="auth-shell">
+        <section class="showcase">
+            <div>
+                <a href="{{ route('dashboard') }}" class="brand">
+                    <div class="brand-mark">P</div>
+                    <div><div class="brand-name">PINTA</div><div class="brand-sub">Pindah Tangan Mahasiswa Jambi</div></div>
+                </a>
+                <div class="showcase-copy">
+                    <span class="eyebrow">✦ &nbsp; Komunitas Kampus Terpercaya</span>
+                    <h1>Beri Nilai Baru pada Barang Bekasmu.</h1>
+                    <p>Platform jual beli langsung, barter antar mahasiswa, dan lelang transparan untuk komunitas kampus serta warga Kota Jambi.</p>
+                </div>
+                <div class="visual" aria-hidden="true">
+                    <div class="visual-art"><div class="book">▤</div><div class="tablet">▣</div></div>
+                </div>
+            </div>
+            <div class="showcase-foot">
+                <span>♧ &nbsp; UNJA Mendalo &amp; Telanaipura</span>
+                <span>◇ &nbsp; Komunitas Kampus Jambi</span>
+            </div>
+        </section>
 
-        {{-- HEADER --}}
-        <div class="login-header">
+        <section class="auth-side">
+            <div class="auth-card">
+                @if (session('success'))
+                    <div class="alert alert-success">{ session('success') }</div>
+                @endif
+                @if ($errors->any())
+                    <div class="alert alert-error">
+                        <strong>Periksa kembali data yang dimasukkan.</strong>
+                        <ul>@foreach ($errors->all() as $error)<li>{ $error }</li>@endforeach</ul>
+                    </div>
+                @endif
+                <h2>Masuk ke PINTA</h2>
+                <p class="intro">Masuk untuk mengelola barang, penawaran barter, dan aktivitas transaksi kamu.<br>Gunakan email yang terdaftar untuk melanjutkan.</p>
 
-            <div class="logo">
-                PinTa
+                <form action="{{ route('login.store') }}" method="POST">
+                    @csrf
+
+            <div class="field">
+                <label for="email">Email</label>
+                <input id="email" type="email" name="email" value="{{ old('email') }}" placeholder="nama@email.com" autocomplete="email" maxlength="150" required autofocus>
+                @error('email') <small style="display:block;color:#a12622;margin-top:5px">{{ $message }}</small> @enderror
             </div>
 
-            <h1>Selamat Datang!</h1>
-
-            <p>Silakan login untuk melanjutkan ke marketplace.</p>
-
-        </div>
-
-
-        {{-- SUCCESS MESSAGE --}}
-        @if (session('success'))
-
-            <div class="alert-success">
-                {{ session('success') }}
+            <div class="field">
+                <label for="password">Kata Sandi</label>
+                <div class="input-wrap has-toggle">
+                    <input id="password" type="password" name="password" placeholder="Masukkan kata sandi" autocomplete="current-password"  required>
+                    <button class="toggle-password" type="button" data-target="password">Lihat</button>
+                </div>
+                @error('password') <small style="display:block;color:#a12622;margin-top:5px">{{ $message }}</small> @enderror
             </div>
 
-        @endif
+                    <button type="submit" class="submit">Masuk ke PINTA&nbsp; →</button>
+                </form>
 
-
-        {{-- ERROR MESSAGE --}}
-        @if ($errors->any())
-
-            <div class="alert-error">
-
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-
+                <div class="auth-switch">Belum memiliki akun PINTA? <a href="{{ route('register') }}">Daftar sekarang</a></div>
             </div>
+        </section>
+    </main>
 
-        @endif
-
-
-        {{-- LOGIN FORM --}}
-        <form action="{{ route('login.store') }}" method="POST">
-
-            @csrf
-
-            <div class="form-group">
-
-                <label for="email">
-                    Email
-                </label>
-
-                <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value="{{ old('email') }}"
-                    placeholder="Masukkan email"
-                    autocomplete="email"
-                    required
-                    autofocus
-                >
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label for="password">
-                    Password
-                </label>
-
-                <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    placeholder="Masukkan password"
-                    autocomplete="current-password"
-                    required
-                >
-
-            </div>
-
-
-            <button type="submit" class="btn-login">
-                Login
-            </button>
-
-        </form>
-
-
-        {{-- REGISTER LINK --}}
-        <div class="register-link">
-
-            Belum memiliki akun?
-
-            <a href="{{ route('register') }}">
-                Daftar sekarang
-            </a>
-
-        </div>
-
-
-        {{-- BACK TO HOME --}}
-        <div class="back-home">
-
-            <a href="{{ route('dashboard') }}">
-                ← Kembali ke Beranda
-            </a>
-
-        </div>
-
-    </div>
-
+    <footer class="bottom">
+        <span><strong>♧ Data akun kamu dijaga dengan aman</strong> &nbsp; • &nbsp; Portal PinTa Jambi</span>
+        <span><a href="{{ route('dashboard') }}">Kembali ke Beranda</a> &nbsp; • &nbsp; © {{ date('Y') }} PINTA</span>
+    </footer>
+    <script>
+        document.querySelectorAll('.toggle-password').forEach(function(button) {
+            button.addEventListener('click', function() {
+                const input = document.getElementById(this.dataset.target);
+                const show = input.type === 'password';
+                input.type = show ? 'text' : 'password';
+                this.textContent = show ? 'Sembunyikan' : 'Lihat';
+            });
+        });
+    </script>
 </body>
 </html>

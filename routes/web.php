@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\SellerRegistrationController;
+use App\Http\Controllers\Seller\SellerDashboardController;
+use App\Http\Controllers\Seller\SellerProductController;
 
 // ==========================================
 // PUBLIC ROUTES
@@ -133,4 +135,18 @@ Route::middleware(['auth', 'role:admin'])
             [SellerApprovalController::class, 'reject']
         )
             ->name('seller-registrations.reject');
+    });
+
+Route::middleware(['auth', 'role:penjual'])
+    ->prefix('seller')
+    ->name('seller.')
+    ->group(function () {
+
+        // Dashboard Penjual
+        Route::get('/dashboard', [SellerDashboardController::class, 'index'])
+            ->name('dashboard');
+
+        // Pengelolaan Produk
+        Route::get('/products', [SellerProductController::class, 'index'])
+            ->name('products.index');
     });

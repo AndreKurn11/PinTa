@@ -2,43 +2,66 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Notifications\Notifiable;
+use App\Models\Role;
 
 class User extends Authenticatable
 {
-    use HasFactory;
+  use Notifiable;
 
-    protected $table = 'users';
+  protected $table = 'users';
 
-    protected $fillable = [
-        'role_id',
-        'name',
-        'email',
-        'password',
-        'phone',
-        'identity_number',
-        'address',
-        'avatar_path',
-        'status',
+  protected $fillable = [
+    'name',
+    'email',
+    'password',
+    'phone',
+    'identity_number',
+    'address',
+    'avatar_path',
+    'status',
+  ];
+
+  protected $hidden = [
+    'password',
+    'remember_token',
+  ];
+
+  protected function casts(): array
+  {
+    return [
+      'password' => 'hashed',
+      'is_verified' => 'boolean',
+      'verified_at' => 'datetime',
     ];
+  }
 
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+  // Relasi Many-to-Many dengan Role
+  public function roles(): BelongsToMany
+  {
+    return $this->belongsToMany(
+      Role::class,
+      'users_roles',
+      'user_id',
+      'role_id'
+    )->withPivot('assigned_at');
+  }
 
-    protected function casts(): array
-    {
-        return [
-            'password' => 'hashed',
-        ];
-    }
+  // Memeriksa apakah user memiliki role tertentu
+  public function hasRole(string $role): bool
+  {
+    return $this->roles()
+      ->where('name', $role)
+      ->exists();
+  }
 
-    // Relasi User ke Role
-    public function role(): BelongsTo
-    {
-        return $this->belongsTo(Role::class);
-    }
+  // Memeriksa apakah user memiliki salah satu role
+  public function hasAnyRole(array $roles): bool
+  {
+    return $this->roles()
+      ->whereIn('name', $roles)
+      ->exists();
+  }
 }

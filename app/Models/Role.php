@@ -3,19 +3,25 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Role extends Model
 {
-    protected $table = 'roles';
+  protected $table = 'roles';
 
-    protected $fillable = [
-        'name',
-        'description',
-    ];
+  protected $fillable = [
+    'name',
+    'description',
+  ];
 
-    public function users()
-    {
-        return $this->hasMany(User::class);
-    }
+  // Relasi Many-to-Many dengan User
+  public function users(): BelongsToMany
+  {
+    return $this->belongsToMany(
+      User::class,
+      'users_roles',
+      'role_id',
+      'user_id'
+    )->withPivot('assigned_at');
+  }
 }

@@ -11,44 +11,36 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             // Primary key
             $table->id();
-            
-            // Foreign key ke tabel roles
-            $table->foreignId('role_id')->constrained('roles')->restrictOnDelete();
 
             // Informasi user
             $table->string('name', 100);
             $table->string('email', 150)->unique();
             $table->string('password', 255);
+
+            // Informasi tambahan
             $table->string('phone', 20)->nullable();
-            $table->string('identity_number', 20)->nullable();
+            $table->string('identity_number', 30)->nullable();
             $table->text('address')->nullable();
             $table->string('avatar_path', 255)->nullable();
+
+            // Verifikasi
+            $table->boolean('is_verified')->default(false);
+            $table->dateTime('verified_at')->nullable();
+
+            // Foreign key
+            $table->foreignId('verified_by')->nullable()->constrained('users')->nullOnDelete();
+
+            // Status akun
             $table->enum('status', ['active', 'suspended'])->default('active');
 
             // Timestamps
-            $table->timestamps();
-        });
-
-        Schema::create('password_reset_tokens', function (Blueprint $table) {
-            $table->string('email')->primary();
-            $table->string('token');
-            $table->timestamp('created_at')->nullable();
-        });
-
-        Schema::create('sessions', function (Blueprint $table) {
-            $table->string('id')->primary();
-            $table->foreignId('user_id')->nullable()->index();
-            $table->string('ip_address', 45)->nullable();
-            $table->text('user_agent')->nullable();
-            $table->longText('payload');
-            $table->integer('last_activity')->index();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
     }
 
     public function down(): void
     {
         Schema::dropIfExists('users');
-        Schema::dropIfExists('password_reset_tokens');
-        Schema::dropIfExists('sessions');
     }
 };

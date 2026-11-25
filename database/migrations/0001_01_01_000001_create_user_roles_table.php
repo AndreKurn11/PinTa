@@ -1,0 +1,30 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('users_roles', function (Blueprint $table) {
+            // Foreign key ke tabel user
+            $table->foreignId('user_id')->constrained('users');
+
+            // Foreign key ke tabel role
+            $table->foreignId('role_id')->constrained('roles');
+
+            // Timestamps
+            $table->timestamp('assigned_at')->useCurrent();
+
+            // Mencegah role yang sama diberikan dua kali
+            $table->primary(['user_id', 'role_id']);
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('users_roles');
+    }
+};

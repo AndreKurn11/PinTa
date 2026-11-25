@@ -12,12 +12,13 @@ return new class extends Migration
             // Primary key
             $table->id();
 
-            // Informasi role
+            // Role data
             $table->string('name', 30)->unique();
             $table->string('description', 150)->nullable();
 
             // Timestamps
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
     }
 

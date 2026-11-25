@@ -2,25 +2,28 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Role;
+use Illuminate\Database\Seeder;
 
 class RoleSeeder extends Seeder
 {
+    /**
+     * Menambahkan data role ke dalam tabel roles.
+     */
     public function run(): void
     {
         $roles = [
             [
                 'name' => 'admin',
-                'description' => 'Administrator sistem',
+                'description' => 'Administrator yang mengelola seluruh sistem marketplace.',
             ],
             [
                 'name' => 'pembeli',
-                'description' => 'Pengguna yang melakukan pembelian',
+                'description' => 'Pengguna yang dapat melakukan pembelian produk.',
             ],
             [
                 'name' => 'penjual',
-                'description' => 'Pengguna yang menjual produk',
+                'description' => 'Pengguna yang dapat mengelola toko dan menjual produk.',
             ],
         ];
 

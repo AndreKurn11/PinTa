@@ -4,13 +4,10 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Notifications\Notifiable;
-use App\Models\Role;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
-  use Notifiable;
-
   protected $table = 'users';
 
   protected $fillable = [
@@ -21,12 +18,14 @@ class User extends Authenticatable
     'identity_number',
     'address',
     'avatar_path',
+    'is_verified',
+    'verified_at',
+    'verified_by',
     'status',
   ];
 
   protected $hidden = [
     'password',
-    'remember_token',
   ];
 
   protected function casts(): array
@@ -38,7 +37,9 @@ class User extends Authenticatable
     ];
   }
 
-  // Relasi Many-to-Many dengan Role
+  /**
+   * Relasi Many-to-Many dengan Role.
+   */
   public function roles(): BelongsToMany
   {
     return $this->belongsToMany(
@@ -49,19 +50,13 @@ class User extends Authenticatable
     )->withPivot('assigned_at');
   }
 
-  // Memeriksa apakah user memiliki role tertentu
+  /**
+   * Memeriksa apakah user memiliki role tertentu.
+   */
   public function hasRole(string $role): bool
   {
     return $this->roles()
       ->where('name', $role)
-      ->exists();
-  }
-
-  // Memeriksa apakah user memiliki salah satu role
-  public function hasAnyRole(array $roles): bool
-  {
-    return $this->roles()
-      ->whereIn('name', $roles)
       ->exists();
   }
 }

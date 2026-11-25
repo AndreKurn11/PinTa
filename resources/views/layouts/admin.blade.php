@@ -220,6 +220,12 @@
             </li>
 
             <li>
+              <a href="{{ route('admin.seller-registrations.index') }}">
+                  Kelola Pendaftaran Penjual
+              </a>
+            </li>
+
+            <li>
                 <a href="#">
                     🛍️ Manajemen Produk
                 </a>

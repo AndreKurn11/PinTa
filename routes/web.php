@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\Admin\SellerApprovalController;
+use App\Http\Controllers\Admin\AdminDashboardController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
-
+use App\Http\Controllers\SellerRegistrationController;
 
 // ==========================================
 // PUBLIC ROUTES
@@ -88,3 +90,47 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [LoginController::class, 'destroy'])
         ->name('logout');
 });
+
+Route::middleware(['auth', 'role:pembeli'])->group(function () {
+    Route::get('/seller/register', [SellerRegistrationController::class, 'create'])
+        ->name('seller.register');
+
+    Route::post('/seller/register', [SellerRegistrationController::class, 'store'])
+        ->name('seller.register.store');
+});
+
+
+Route::middleware(['auth', 'role:admin'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+
+        // Dashboard Admin
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])
+            ->name('dashboard');
+
+        // Pengelolaan pendaftaran penjual
+        Route::get(
+            '/seller-registrations',
+            [SellerApprovalController::class, 'index']
+        )
+            ->name('seller-registrations.index');
+
+        Route::get(
+            '/seller-registrations/{id}',
+            [SellerApprovalController::class, 'show']
+        )
+            ->name('seller-registrations.show');
+
+        Route::post(
+            '/seller-registrations/{id}/approve',
+            [SellerApprovalController::class, 'approve']
+        )
+            ->name('seller-registrations.approve');
+
+        Route::post(
+            '/seller-registrations/{id}/reject',
+            [SellerApprovalController::class, 'reject']
+        )
+            ->name('seller-registrations.reject');
+    });

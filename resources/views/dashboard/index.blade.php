@@ -268,12 +268,12 @@
                     </a>
 
                     {{-- Hanya pembeli yang belum menjadi penjual --}}
-                    @if (!auth()->user()->hasRole('penjual'))
+                    @if(auth()->check() && auth()->user()->hasRole('pembeli')
+                        && !auth()->user()->hasRole('penjual'))
 
-                        <a href="#">
+                        <a href="{{ route('seller.register') }}">
                             Daftar sebagai Penjual
                         </a>
-
                     @endif
 
                 @endif

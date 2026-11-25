@@ -13,7 +13,6 @@
         <p>
             Berikut adalah halaman pengelolaan marketplace PinTa.
         </p>
-
     </div>
 
 

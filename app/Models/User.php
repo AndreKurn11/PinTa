@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class User extends Authenticatable
 {
@@ -58,5 +59,23 @@ class User extends Authenticatable
     return $this->roles()
       ->where('name', $role)
       ->exists();
+  }
+
+  /**
+   * Relasi One-to-One dengan Store.
+   * Satu user maksimal memiliki satu toko.
+   */
+  public function store(): HasOne
+  {
+    return $this->hasOne(Store::class);
+  }
+
+  /**
+   * Relasi One-to-Many dengan SellerRegistration.
+   * Satu user dapat memiliki beberapa riwayat pengajuan penjual.
+   */
+  public function sellerRegistrations(): HasMany
+  {
+    return $this->hasMany(SellerRegistration::class);
   }
 }

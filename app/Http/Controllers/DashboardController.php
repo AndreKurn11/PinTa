@@ -2,13 +2,64 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Listing;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
-    // Menentukan dashboard utama berdasarkan prioritas role
-    public function index()
+    // Halaman utama marketplace
+    public function index(Request $request)
+    {
+        $query = Listing::active()
+            ->with(['category', 'primaryImage']);
+
+        // Pencarian berdasarkan nama dan deskripsi produk
+        if ($request->filled('q')) {
+            $search = $request->q;
+
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+
+        // Filter mode transaksi
+        $allowedModes = ['direct', 'barter', 'auction'];
+
+        $saleModes = array_intersect(
+            (array) $request->input('sale_mode', []),
+            $allowedModes
+        );
+
+        if (!empty($saleModes)) {
+            $query->whereIn('sale_mode', $saleModes);
+        }
+
+        // Pengurutan produk
+        switch ($request->input('sort', 'latest')) {
+            case 'cheapest':
+                $query->orderByRaw('price IS NULL ASC')
+                    ->orderBy('price', 'asc');
+                break;
+
+            case 'expensive':
+                $query->orderByRaw('price IS NULL ASC')
+                    ->orderBy('price', 'desc');
+                break;
+
+            default:
+                $query->latest();
+                break;
+        }
+
+        $products = $query->paginate(9)->withQueryString();
+
+        return view('dashboard.index', compact('products'));
+    }
+
+    // Dashboard berdasarkan role pengguna
+    public function redirectByRole()
     {
         /** @var \App\Models\User $user */
         $user = Auth::user();
@@ -18,11 +69,11 @@ class DashboardController extends Controller
         }
 
         if ($user->hasRole('penjual')) {
-            return redirect()->route('penjual.dashboard');
+            return redirect()->route('seller.dashboard');
         }
 
         if ($user->hasRole('pembeli')) {
-            return redirect()->route('pembeli.dashboard');
+            return redirect()->route('dashboard');
         }
 
         abort(403, 'Anda belum memiliki role yang sesuai.');

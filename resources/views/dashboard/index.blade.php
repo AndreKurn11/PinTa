@@ -119,17 +119,61 @@
         .listing-head p { margin-top: 4px; color: var(--muted); font-size: 12px; }
         .sort-select { padding: 9px 12px; border: 1px solid var(--line); border-radius: 10px; background: white; color: #625b55; font-size: 11px; }
         .product-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 15px; }
-        .product-card { overflow: hidden; transition: .2s; }
+        .product-card {
+            min-width: 0; overflow: hidden; display: flex; flex-direction: column;
+            border-radius: 22px; transition: .2s; padding: 12px 12px 0;
+        }
         .product-card:hover { transform: translateY(-3px); box-shadow: 0 12px 28px #30251c12; }
-        .product-image { height: 175px; display: grid; place-items: center; background: linear-gradient(135deg,#f1ece7,#e8dfd8); color: #9a8d82; font-size: 12px; }
+        .product-image {
+            position: relative; flex: 0 0 210px; width: 100%; height: 210px; min-height: 0;
+            overflow: hidden; display: flex; align-items: center; justify-content: center;
+            padding: 0; border-radius: 20px; background: #f1eeeb; color: #9a8d82; font-size: 12px;
+        }
+        .product-image img {
+            display: block; width: 100%; height: 100%; max-width: 100%; max-height: 100%;
+            object-fit: cover;
+        }
         .product-image .material-symbols-outlined { font-size: 38px; }
-        .product-info { padding: 14px; }
-        .product-meta { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 9px; }
-        .product-tag { padding: 4px 7px; border-radius: 20px; background: var(--primary-soft); color: var(--primary); font-size: 9px; font-weight: 700; }
-        .product-location { color: var(--muted); font-size: 10px; }
-        .product-info h3 { min-height: 38px; font-size: 13px; line-height: 1.45; }
-        .price { margin: 9px 0 13px; color: var(--primary); font: 800 15px 'Plus Jakarta Sans'; }
-        .product-info .btn { width: 100%; border-radius: 10px; padding: 10px; }
+        .product-tag {
+            position: absolute; z-index: 2; top: 14px; left: 14px;
+            padding: 7px 13px; border-radius: 30px; background: #fff8f1;
+            color: #985b3b; font-size: 11px; font-weight: 700;
+        }
+        .product-tag.mode-barter { background: #f6eaff; color: #8519b4; }
+        .product-tag.mode-auction { background: #fff2df; color: #b65300; }
+        .favorite-mark {
+            position: absolute; z-index: 2; top: 14px; right: 14px; width: 42px; height: 42px;
+            display: grid; place-items: center; border-radius: 50%; background: rgba(255,255,255,.94);
+            color: #777; font-size: 23px;
+        }
+        .product-info { flex: 1; min-width: 0; display: flex; flex-direction: column; padding: 16px 0 12px; }
+        .product-location {
+            display: flex; align-items: center; gap: 7px; min-width: 0; margin-bottom: 8px;
+            overflow: hidden; color: #625b55; font-size: 12px; white-space: nowrap; text-overflow: ellipsis;
+        }
+        .product-location .material-symbols-outlined { flex: 0 0 auto; font-size: 17px; color: #80614f; }
+        .product-info h3 {
+            min-height: 26px; margin: 0 0 5px; display: -webkit-box; overflow: hidden;
+            -webkit-box-orient: vertical; -webkit-line-clamp: 2; font-size: 15px; line-height: 1.4;
+        }
+        .product-description {
+            min-height: 38px; margin: 0; color: #716a64; font-size: 12px; line-height: 1.5;
+            display: -webkit-box; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 2;
+        }
+        .product-footer {
+            display: flex; align-items: center; justify-content: space-between; gap: 10px;
+            margin-top: auto; padding: 14px 0 14px; border-top: 1px solid var(--line);
+        }
+        .price-wrap { min-width: 0; }
+        .price-label { display: block; margin-bottom: 2px; color: #77706a; font-size: 11px; }
+        .price { margin: 0; color: var(--primary); font: 800 18px 'Plus Jakarta Sans'; white-space: nowrap; }
+        .product-card .product-action {
+            flex: 0 0 auto; border: 0; border-radius: 30px; padding: 10px 15px;
+            color: #fff; background: #89563d; font-size: 12px; font-weight: 700;
+            text-decoration: none; text-align: center; white-space: nowrap;
+        }
+        .product-card .product-action.mode-barter { background: #821eaa; }
+        .product-card .product-action.mode-auction { background: #b65300; }
         footer { margin-top: 40px; padding: 30px 20px; background: #302923; color: white; text-align: center; }
         footer p { margin-top: 7px; color: #c8beb6; font-size: 12px; }
         footer small { display: block; margin-top: 18px; color: #a99e95; font-size: 10px; }
@@ -153,7 +197,7 @@
             .campus-card { max-width: 440px; }
             .category-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
             .catalog-layout { grid-template-columns: 1fr; }
-            .filter-card { display: none; }
+            .filter-card { display: block; }
         }
         @media(max-width: 480px) {
             .brand-sub { display: none; }
@@ -168,11 +212,16 @@
             .category strong { font-size: 11px; }
             .category small { font-size: 9px; }
             .product-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
-            .product-image { height: 125px; }
-            .product-info { padding: 10px; }
-            .product-info h3 { font-size: 11px; }
-            .price { font-size: 12px; }
-            .product-info .btn { font-size: 10px; padding: 9px 5px; }
+            .product-card { padding: 8px 8px 0; border-radius: 17px; }
+            .product-image { flex-basis: 145px; height: 145px; border-radius: 15px; }
+            .product-info { padding: 12px 0 8px; }
+            .product-info h3 { font-size: 12px; }
+            .product-description { font-size: 10px; min-height: 30px; }
+            .product-footer { align-items: flex-start; flex-direction: column; gap: 9px; }
+            .price { font-size: 15px; }
+            .product-card .product-action { width: 100%; font-size: 11px; padding: 9px 5px; }
+            .product-tag { top: 9px; left: 9px; font-size: 9px; padding: 6px 9px; }
+            .favorite-mark { top: 9px; right: 9px; width: 34px; height: 34px; font-size: 19px; }
             .listing-head h2 { font-size: 16px; }
             .sort-select { max-width: 115px; }
         }
@@ -196,9 +245,14 @@
                 <span>UNJA Mendalo, Jambi</span>
             </div>
 
-            <form action="#produk" method="GET" class="search-wrap">
+            <form action="{{ route('dashboard') }}" method="GET" class="search-wrap">
                 <span class="material-symbols-outlined">search</span>
-                <input type="search" name="q" value="{{ request('q') }}" placeholder="Cari buku kuliah, laptop, perlengkapan kos...">
+                <input
+                    type="search"
+                    name="q"
+                    value="{{ request('q') }}"
+                    placeholder="Cari buku kuliah, laptop, perlengkapan kos..."
+                >
             </form>
 
             <nav class="nav-actions">
@@ -289,71 +343,172 @@
 
         {{-- PRODUK --}}
         <section class="section" id="produk">
-            <div class="catalog-layout">
-                <aside>
-                    <div class="filter-card">
-                        <div class="filter-head"><h3>Filter Pencarian</h3><button type="reset" class="reset" onclick="document.querySelectorAll('.filter-card input').forEach(el => el.checked = false)">Reset</button></div>
-                        <div class="filter-group">
-                            <span class="filter-label">Mode Transaksi</span>
-                            <label class="filter-option"><input type="checkbox" checked> Semua Mode <span>—</span></label>
-                            <label class="filter-option"><input type="checkbox"> Jual Beli <span>—</span></label>
-                            <label class="filter-option"><input type="checkbox"> Barter <span>—</span></label>
-                            <label class="filter-option"><input type="checkbox"> Lelang <span>—</span></label>
+            <form action="{{ route('dashboard') }}" method="GET">
+                <input type="hidden" name="q" value="{{ request('q') }}">
+
+                <div class="catalog-layout">
+                    {{-- FILTER PRODUK --}}
+                    <aside>
+                        <div class="filter-card">
+                            <div class="filter-head">
+                                <h3>Filter Pencarian</h3>
+                                <a href="{{ route('dashboard') }}" class="reset">Reset</a>
+                            </div>
+
+                            <div class="filter-group">
+                                <span class="filter-label">Mode Transaksi</span>
+
+                                <label class="filter-option">
+                                    <input type="checkbox" name="sale_mode[]" value="direct"
+                                        @checked(in_array('direct', (array) request('sale_mode', [])))>
+                                    Jual Beli
+                                </label>
+
+                                <label class="filter-option">
+                                    <input type="checkbox" name="sale_mode[]" value="barter"
+                                        @checked(in_array('barter', (array) request('sale_mode', [])))>
+                                    Barter
+                                </label>
+
+                                <label class="filter-option">
+                                    <input type="checkbox" name="sale_mode[]" value="auction"
+                                        @checked(in_array('auction', (array) request('sale_mode', [])))>
+                                    Lelang
+                                </label>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary" style="width:100%; margin-top:15px;">
+                                Terapkan Filter
+                            </button>
+
+                            <div class="tip-card">
+                                <strong>Tips transaksi aman</strong>
+                                <p>Periksa kondisi barang dan sepakati lokasi COD yang ramai sebelum bertransaksi.</p>
+                            </div>
                         </div>
-                        <div class="tip-card">
-                            <strong>Tips transaksi aman</strong>
-                            <p>Periksa kondisi barang dan sepakati lokasi COD yang ramai sebelum bertransaksi.</p>
+                    </aside>
+
+                    {{-- DAFTAR PRODUK --}}
+                    <div>
+                        <div class="listing-head">
+                            <div>
+                                <h2>Produk Terbaru</h2>
+                                <p>Barang pilihan dari komunitas PinTa.</p>
+                            </div>
+
+                            <select name="sort" class="sort-select" onchange="this.form.submit()">
+                                <option value="latest" @selected(request('sort', 'latest') === 'latest')>
+                                    Terbaru
+                                </option>
+                                <option value="cheapest" @selected(request('sort') === 'cheapest')>
+                                    Harga terendah
+                                </option>
+                                <option value="expensive" @selected(request('sort') === 'expensive')>
+                                    Harga tertinggi
+                                </option>
+                            </select>
                         </div>
-                    </div>
-                </aside>
 
-                <div>
-                    <div class="listing-head">
-                        <div><h2>Produk Terbaru</h2><p>Barang pilihan dari komunitas PinTa.</p></div>
-                        <select class="sort-select" aria-label="Urutkan produk">
-                            <option>Terbaru</option>
-                            <option>Harga terendah</option>
-                            <option>Harga tertinggi</option>
-                        </select>
-                    </div>
+                        <div class="product-grid">
+                            @forelse ($products as $product)
+                                @php
+                                    $modeLabel = [
+                                        'direct' => 'Jual Beli',
+                                        'barter' => 'Barter',
+                                        'auction' => 'Lelang',
+                                    ][$product->sale_mode] ?? ucfirst($product->sale_mode);
 
-                    @php
-                        // Data produk sementara. Nantinya dapat diganti dengan data dari database.
-                        $products = [
-                            ['name' => 'Produk Contoh 1', 'price' => 50000],
-                            ['name' => 'Produk Contoh 2', 'price' => 75000],
-                            ['name' => 'Produk Contoh 3', 'price' => 100000],
-                            ['name' => 'Produk Contoh 4', 'price' => 125000],
-                        ];
-                    @endphp
+                                    $actionLabel = [
+                                        'direct' => 'Beli / Detail',
+                                        'barter' => 'Ajukan Barter',
+                                        'auction' => 'Ikuti Lelang',
+                                    ][$product->sale_mode] ?? 'Lihat Detail';
 
-                    <div class="product-grid">
-                        @foreach ($products as $product)
-                            <article class="product-card">
-                                <div class="product-image">
-                                    <div><span class="material-symbols-outlined">inventory_2</span><br>Foto Produk</div>
-                                </div>
-                                <div class="product-info">
-                                    <div class="product-meta"><span class="product-tag">JUAL BELI</span><span class="product-location">Jambi</span></div>
-                                    <h3>{{ $product['name'] }}</h3>
-                                    <p class="price">Rp {{ number_format($product['price'], 0, ',', '.') }}</p>
+                                    $priceLabel = [
+                                        'direct' => 'Harga',
+                                        'barter' => 'Perkiraan Nilai',
+                                        'auction' => 'Harga Saat Ini',
+                                    ][$product->sale_mode] ?? 'Harga';
+                                @endphp
 
-                                    @auth
-                                        @if (auth()->user()->hasRole('pembeli'))
-                                            <a href="{{ route('checkout') }}" class="btn btn-primary">Checkout</a>
+                                <article class="product-card">
+                                    <div class="product-image">
+                                        @if ($product->primaryImage)
+                                            <img
+                                                src="{{ asset('storage/' . $product->primaryImage->image_path) }}"
+                                                alt="{{ $product->title }}">
                                         @else
-                                            <a href="{{ route('login') }}" class="btn btn-outline">Lihat Produk</a>
+                                            <div>
+                                                <span class="material-symbols-outlined">inventory_2</span>
+                                                <br>Foto Produk
+                                            </div>
                                         @endif
-                                    @else
-                                        <a href="{{ route('login') }}" class="btn btn-outline">Login untuk Checkout</a>
-                                    @endauth
+
+                                        <span class="product-tag mode-{{ $product->sale_mode }}">{{ $modeLabel }}</span>
+                                        {{-- <span class="favorite-mark" aria-hidden="true">
+                                            <span class="material-symbols-outlined">favorite_border</span>
+                                        </span> --}}
+                                    </div>
+
+                                    <div class="product-info">
+                                        <div class="product-location">
+                                            <span class="material-symbols-outlined">location_on</span>
+                                            <span>{{ $product->location ?: 'Lokasi tidak dicantumkan' }}</span>
+                                        </div>
+
+                                        <h3>{{ $product->title }}</h3>
+                                        <p class="product-description">{{ $product->description }}</p>
+
+                                        <div class="product-footer">
+                                            <div class="price-wrap">
+                                                <span class="price-label">{{ $priceLabel }}</span>
+                                                @if ($product->price !== null)
+                                                    <p class="price">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
+                                                @else
+                                                    <p class="price">Barter</p>
+                                                @endif
+                                            </div>
+
+                                            @auth
+                                                @if (auth()->user()->hasRole('pembeli'))
+                                                    <a href="{{ route('checkout') }}"
+                                                       class="product-action mode-{{ $product->sale_mode }}">
+                                                        {{ $actionLabel }}
+                                                    </a>
+                                                @else
+                                                    <a href="{{ route('login') }}"
+                                                       class="product-action mode-{{ $product->sale_mode }}">
+                                                        Lihat Produk
+                                                    </a>
+                                                @endif
+                                            @else
+                                                <a href="{{ route('login') }}"
+                                                   class="product-action mode-{{ $product->sale_mode }}">
+                                                    Login
+                                                </a>
+                                            @endauth
+                                        </div>
+                                    </div>
+                                </article>
+                            @empty
+                                <div style="grid-column:1/-1; text-align:center; padding:45px 20px;">
+                                    <span class="material-symbols-outlined" style="font-size:45px; color:#b9aaa0;">inventory_2</span>
+                                    <h3 style="margin-top:10px;">Produk Belum Ditemukan</h3>
+                                    <p style="color:#827b75; margin-top:6px;">
+                                        Coba ubah kata kunci atau filter pencarian.
+                                    </p>
                                 </div>
-                            </article>
-                        @endforeach
+                            @endforelse
+                        </div>
+
+                        <div style="margin-top:25px;">
+                            {{ $products->links() }}
+                        </div>
                     </div>
                 </div>
-            </div>
+            </form>
         </section>
+
     </main>
 
     <footer>

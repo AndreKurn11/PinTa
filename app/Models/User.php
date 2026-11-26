@@ -78,4 +78,13 @@ class User extends Authenticatable
   {
     return $this->hasMany(SellerRegistration::class);
   }
+
+  /**
+   * Relasi One-to-Many dengan Listing.
+   * Satu user dapat memiliki banyak produk.
+   */
+  public function listings(): HasMany
+  {
+    return $this->hasMany(Listing::class, 'seller_id');
+  }
 }

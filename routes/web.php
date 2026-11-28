@@ -12,12 +12,21 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Seller\SellerDashboardController;
 use App\Http\Controllers\Seller\SellerProductController;
 
+use App\Http\Controllers\Buyer\ProductController;
+
+use App\Http\Controllers\Buyer\BarterCheckoutController;
+use App\Http\Controllers\Buyer\BarterOfferController;
+
 // ==========================================
 // PUBLIC ROUTES
 // ==========================================
 
 Route::get('/', [DashboardController::class, 'index'])
     ->name('dashboard');
+
+Route::get('/products/{listing}', [ProductController::class, 'show'])
+    ->whereNumber('listing')
+    ->name('products.show');
 
 
 // ==========================================
@@ -56,7 +65,68 @@ Route::middleware(['auth', 'role:pembeli'])->group(function () {
 
     Route::post('/seller/register', [SellerRegistrationController::class, 'store'])
         ->name('seller.register.store');
+
+    // Menampilkan halaman checkout barter
+    Route::get('/barter/checkout/{listing}', [
+        BarterCheckoutController::class, 'create'
+    ])
+        ->whereNumber('listing')
+        ->name('barter.checkout.create');
+
+    // Menyimpan checkout barter
+    Route::post('/barter/checkout/{listing}', [
+        BarterCheckoutController::class, 'store'
+    ])
+        ->whereNumber('listing')
+        ->name('barter.checkout.store');
+
+    // Menampilkan hasil checkout
+    Route::get('/barter/checkout/drafts/{draft}', [
+        BarterCheckoutController::class, 'ready'
+    ])
+        ->whereNumber('draft')
+        ->name('barter.checkout.ready');
+    
+    // ==========================================
+    // BARTER OFFER ROUTES
+    // ==========================================
+    
+    // Daftar penawaran barter milik pembeli.
+    Route::get('/barter/offers', [
+        BarterOfferController::class, 'index'
+    ])->name('barter.offers.index');
+
+    // Menampilkan form pengajuan barter.
+    Route::get('/barter/checkout/drafts/{draft}/offer', [
+        BarterOfferController::class, 'create'
+    ])
+        ->whereNumber('draft')
+        ->name('barter.offers.create');
+
+    // Menyimpan pengajuan barter.
+    Route::post('/barter/checkout/drafts/{draft}/offer', [
+        BarterOfferController::class, 'store'
+    ])
+        ->whereNumber('draft')
+        ->name('barter.offers.store');
+
+    // Menampilkan detail penawaran.
+    Route::get('/barter/offers/{offer}', [
+        BarterOfferController::class, 'show'
+    ])
+        ->whereNumber('offer')
+        ->name('barter.offers.show');
+
+    // Menampilkan foto barang tawaran.
+    Route::get('/barter/offers/{offer}/items/{item}/photo', [
+        BarterOfferController::class, 'photo'
+    ])
+    ->whereNumber('offer')
+    ->whereNumber('item')
+    ->name('barter.offers.photo');
+
 });
+
 
 
 // ==========================================

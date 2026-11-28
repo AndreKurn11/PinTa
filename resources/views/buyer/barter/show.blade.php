@@ -190,6 +190,44 @@
     <div class="summary-row"><span>Metode serah terima</span><strong>{{ $offer->checkoutDraft->delivery_method === 'cod' ? 'COD' : 'Pengiriman manual' }}</strong></div>
     <div class="offer-item"><strong>Catatan</strong><p>{{ $offer->message ?? 'Tidak ada catatan' }}</p></div>
     @if($offer->status === 'pending')<p class="checkout-note">Menunggu keputusan pemilik barang. Belum ada pesanan atau pembayaran.</p>@endif
+
+    @if($errors->any())
+        <div class="error-box" role="alert">
+            {{ $errors->first() }}
+        </div>
+    @endif
+
+    @if($offer->status === 'pending')
+
+        <form method="POST"
+            action="{{ route('barter.offers.cancel', $offer->id) }}"
+            onsubmit="return confirm('Batalkan penawaran ini?')">
+
+            @csrf
+
+            <input type="hidden" name="agreement" value="1">
+
+            <button type="submit" class="btn btn-danger">
+                Batalkan Penawaran
+            </button>
+
+        </form>
+
+    @elseif($offer->status === 'accepted')
+
+        @if($order ?? null)
+
+            <a class="btn btn-barter"
+            href="{{ route('barter.handover.show', $order->id) }}">
+
+                Lihat Progres Barter
+
+            </a>
+
+        @endif
+
+    @endif
+
     <div class="offer-actions"><a class="btn btn-barter" href="{{ route('barter.offers.index') }}">Penawaran Saya</a><a class="btn btn-outline" href="{{ route('dashboard') }}">Beranda</a></div>
 </main>
 </body>

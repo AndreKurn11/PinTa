@@ -16,6 +16,8 @@ use App\Http\Controllers\Buyer\ProductController;
 
 use App\Http\Controllers\Buyer\BarterCheckoutController;
 use App\Http\Controllers\Buyer\BarterOfferController;
+use App\Http\Controllers\Seller\SellerBarterController;
+use App\Http\Controllers\BarterHandoverController;
 
 // ==========================================
 // PUBLIC ROUTES
@@ -184,7 +186,80 @@ Route::middleware(['auth', 'role:penjual'])
         // Simpan produk
         Route::post('/products', [SellerProductController::class, 'store'])
             ->name('products.store');
+
+                
+        // ==========================================
+        // SELLER BARTER ROUTES
+        // ==========================================
+
+        // Daftar pengajuan barter.
+        Route::get('/barter', [
+            SellerBarterController::class, 'index'
+        ])->name('barter.index');
+
+        // Detail pengajuan barter.
+        Route::get('/barter/{offer}', [
+            SellerBarterController::class, 'show'
+        ])
+            ->whereNumber('offer')
+            ->name('barter.show');
+
+        // Menerima penawaran barter.
+        Route::post('/barter/{offer}/accept', [
+            SellerBarterController::class, 'accept'
+        ])
+            ->whereNumber('offer')
+            ->name('barter.accept');
+
+        // Menolak penawaran barter.
+        Route::post('/barter/{offer}/reject', [
+            SellerBarterController::class, 'reject'
+        ])
+            ->whereNumber('offer')
+            ->name('barter.reject');
+
+        // Menampilkan foto barang penawaran.
+        Route::get('/barter/{offer}/items/{item}/photo', [
+            SellerBarterController::class, 'photo'
+        ])
+            ->whereNumber('offer')
+            ->whereNumber('item')
+            ->name('barter.photo');
+
     });
+
+
+// ==========================================
+// BARTER HANDOVER ROUTES
+// ==========================================
+
+Route::middleware('auth')->group(function () {
+
+    Route::get('/barter/handover/{order}', [
+        BarterHandoverController::class, 'show'
+    ])
+        ->whereNumber('order')
+        ->name('barter.handover.show');
+
+    Route::post('/barter/handover/{order}/send', [
+        BarterHandoverController::class, 'send'
+    ])
+        ->whereNumber('order')
+        ->name('barter.handover.send');
+
+    Route::post('/barter/handover/{order}/receive', [
+        BarterHandoverController::class, 'receive'
+    ])
+        ->whereNumber('order')
+        ->name('barter.handover.receive');
+
+    Route::post('/barter/offers/{offer}/cancel', [
+        BarterHandoverController::class, 'cancel'
+    ])
+        ->whereNumber('offer')
+        ->name('barter.offers.cancel');
+
+});
 
 
 // ==========================================

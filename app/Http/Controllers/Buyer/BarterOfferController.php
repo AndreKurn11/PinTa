@@ -9,6 +9,7 @@ use App\Models\BarterCheckoutDraft;
 use App\Models\BarterOffer;
 use App\Models\Listing;
 use App\Models\User;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -120,11 +121,34 @@ class BarterOfferController extends Controller
         return view('buyer.barter.index', compact('offers'));
     }
 
+
     public function show(Request $request, int $offer)
     {
-        abort_unless($request->user()->status === 'active', 403);
-        $offer = BarterOffer::where('offerer_id', $request->user()->id)->with(['listing', 'items', 'checkoutDraft'])->findOrFail($offer);
-        return view('buyer.barter.show', compact('offer'));
+        abort_unless(
+            $request->user()->status === 'active',
+            403
+        );
+
+        $offer = BarterOffer::where(
+            'offerer_id',
+            $request->user()->id
+        )
+            ->with([
+                'listing',
+                'items',
+                'checkoutDraft',
+            ])
+            ->findOrFail($offer);
+
+        $order = Order::where('barter_offer_id', $offer->id)
+            ->where('buyer_id', $request->user()->id)
+            ->where('order_type', 'barter')
+            ->first();
+
+        return view('buyer.barter.show', compact(
+            'offer',
+            'order'
+        ));
     }
 
     public function photo(Request $request, int $offer, int $item)

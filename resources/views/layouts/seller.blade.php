@@ -125,6 +125,17 @@
             <a href="{{ route('seller.products.index') }}" class="{{ request()->routeIs('seller.products.*') ? 'active' : '' }}">
                 <span class="material-symbols-outlined">inventory_2</span>Kelola Produk
             </a>
+
+            <a href="{{ route('seller.barter.index') }}"
+            class="{{ request()->routeIs('seller.barter.*') ? 'active' : '' }}">
+
+                <span class="material-symbols-outlined">
+                    swap_horiz
+                </span>
+
+                Pengajuan Barter
+            </a>
+
             <a href="/">
                 <span class="material-symbols-outlined">storefront</span>Lihat Marketplace
             </a>

@@ -456,7 +456,11 @@
                                             <span>{{ $product->location ?: 'Lokasi tidak dicantumkan' }}</span>
                                         </div>
 
-                                        <h3>{{ $product->title }}</h3>
+                                        <h3>
+                                            <a href="{{ route('products.show', $product->id) }}">
+                                                {{ $product->title }}
+                                            </a>
+                                        </h3>
                                         <p class="product-description">{{ $product->description }}</p>
 
                                         <div class="product-footer">
@@ -469,24 +473,12 @@
                                                 @endif
                                             </div>
 
-                                            @auth
-                                                @if (auth()->user()->hasRole('pembeli'))
-                                                    <a href="{{ route('checkout') }}"
-                                                       class="product-action mode-{{ $product->sale_mode }}">
-                                                        {{ $actionLabel }}
-                                                    </a>
-                                                @else
-                                                    <a href="{{ route('login') }}"
-                                                       class="product-action mode-{{ $product->sale_mode }}">
-                                                        Lihat Produk
-                                                    </a>
-                                                @endif
-                                            @else
-                                                <a href="{{ route('login') }}"
-                                                   class="product-action mode-{{ $product->sale_mode }}">
-                                                    Login
-                                                </a>
-                                            @endauth
+
+                                            <a href="{{ route('products.show', $product->id) }}"
+                                            class="product-action mode-{{ $product->sale_mode }}">
+                                                {{ $actionLabel }}
+                                            </a>
+
                                         </div>
                                     </div>
                                 </article>
